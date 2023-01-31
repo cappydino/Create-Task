@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Open \"to-do list\"",
+    "done": true
+  },
+  {
+    "name": "Add your first task (add)",
+    "done": false
+  },
+  {
+    "name": "Complete your first task (complete)",
+    "done": false
+  },
+  {
+    "name": "Clear your complete tasks (remove complete)",
+    "done": true
+  }
+]
