@@ -1,28 +1,30 @@
-# main.py
+"""main.py"""
+
 import json
 
 
-# opens the file called to-do.json, loads using json.load, and returns the loaded json object
 def get_list():
-    file = open('to-do.json')
-    to_do_list = json.load(file)
-    file.close()
+    """opens the file called to-do.json, loads using json.load,
+    and returns the loaded json object"""
+    with open('to-do.json', encoding='utf-8') as file:
+        to_do_list = json.load(file)
     return to_do_list
 
 
-# opens the to-do.json file, and writes td_list in json formatting with two spaces for indentation
 def save_list():
-    file = open('to-do.json', 'w')
-    file.write(json.dumps(td_list, indent=2))
-    file.close()
+    """opens the to-do.json file, and writes td_list in json formatting with two spaces
+     for indentation"""
+    with open('to-do.json', 'w', encoding='utf-8') as file:
+        file.write(json.dumps(td_list, indent=2))
 
 
 def list_length():
+    """returns the length of our list"""
     return len(td_list)
 
 
-# creates a dictionary object of a unchecked task, and appends the object to the to-do list
 def add_task(task):
+    """creates a dictionary object of a unchecked task, and appends the object to the to-do list"""
     task_json = {
         'name': task,
         'done': False
@@ -31,6 +33,7 @@ def add_task(task):
 
 
 def complete_task(task):
+    """marks the task as complete, selected by it's number"""
     try:
         td_list[int(task) - 1]['done'] = True
     except ValueError:
@@ -43,31 +46,32 @@ def complete_task(task):
 
 
 def remove_complete():
-    for i in len(td_list).reverse():
+    """removes the complete tasks"""
+    for i in range(len(td_list)-1,-1,-1):  # this range counts down instead of up
         if td_list[i]['done']:
             td_list.pop(i)
 
 
-# generates a delete check question
 def generate_delete_check(task, multiple=False):
+    """generates a delete check question"""
     if not multiple:
         output = 'Are you sure you want to delete the task "'
         output += task['name'] + '"? '
         output += '(done)' if task['done'] else '(Not done)'
         output += '\n(y/n): '
         return output
-    else:
-        output = 'Are you sure you want to delete the task "'
-        output += td_list[task[0]]['name'] + '"'                # < when generate_delete_check is called with multiple
-        output += ' (' + str(len(task)) + ')? '                 # | set to True, the variable 'task' is a list of
-        output += '\n(y/n)'                                     # | indices, so we have to access the item in
-        return output                                           # | 'td_list' instead of 'task'
+    output = 'Are you sure you want to delete the task "'
+    output += td_list[task[0]]['name'] + '"'      # < when generate_delete_check is called with
+    output += ' (' + str(len(task)) + ')? '       # | multiple set to True, the variable 'task' is a
+    output += '\n(y/n)'                           # | list of indices, so we have to access the item
+    return output                                 # | in 'td_list' instead of 'task'
 
 
-# removes the task (can be number or name of task), if protection is true, asks the user before deleting task
 def remove_task(input_task, protection: bool):
+    """removes the task (can be number or name of task),
+    if protection is true, asks the user before deleting task"""
     # if the user entered an int and if the number is in the range
-    if type(input_task) == int and (input_task in range(1, list_length())):
+    if isinstance(input_task, int) and (input_task in range(1, list_length())):
         # defines delete_check for 'are you sure you want to delete {name} {done\not done}'
         delete_check = generate_delete_check(td_list[input_task - 1])
 
@@ -80,12 +84,12 @@ def remove_task(input_task, protection: bool):
             return
 
     # if input_task is a string, searches for a task of the same name
-    elif type(input_task) == str:
+    elif isinstance(input_task, str):
         found_tasks = []
         # finds all tasks that have the input name
-        for i in range(len(td_list)):
-            if td_list[i]['name'] == input_task:
-                found_tasks.append(i)                   # note that the indices will be in ascending order
+        for i, task in enumerate(td_list):
+            if task['name'] == input_task:
+                found_tasks.append(i)            # note that the indices will be in ascending order
 
         if len(found_tasks) == 0:
             print('Sorry, we couldn\'t find any tasks by that name')
@@ -103,8 +107,8 @@ def remove_task(input_task, protection: bool):
         # if we are here, it means that more than one task was found
         delete_check = generate_delete_check(found_tasks, True)
         if (not protection) or (input(delete_check).lower == 'y'):
-            for i in found_tasks.reverse():                             # < We have to reverse the list of indices
-                td_list.pop(i)                                          # | so that we don't delete the wrong items
+            for i in found_tasks.reverse():              # < We have to reverse the list of indices
+                td_list.pop(i)                           # | so that we don't delete the wrong items
             return
 
         print('Ok, will not delete')
@@ -114,6 +118,7 @@ def remove_task(input_task, protection: bool):
 
 
 def display_list():
+    """prints the to do list to the console"""
     # if the list is empty, tell the user so
     if list_length() == 0:
         print("Your list is empty. Try adding a task by saying \'add\'")
@@ -129,6 +134,7 @@ def display_list():
 
 
 def display_help():
+    """lists help page"""
     print('Here are your possible commands:')
     print(' list               - Lists your tasks')
     print(' add                - Adds a task to the list')
@@ -141,8 +147,12 @@ def display_help():
 
 
 def main_loop():
+    """main functional loop"""
+    # gets input from user
     input_text = input('> ').lower()
+    # this loop will stop when the user enters 'exit'
     while not input_text == 'exit':
+        # horribly long if statement which loops through all the commands
         if input_text == 'list':
             display_list()
         elif input_text == 'add':
@@ -161,7 +171,7 @@ def main_loop():
             print('Done')
         elif input_text == 'delete':
             print('Enter the name or number of the task you want to delete')
-            remove_task(int(input('> ')))                                       # TODO make this better
+            remove_task(int(input('> ')), True)                   # TODO make this better
             print('Done')
         elif input_text == 'help':
             display_help()
