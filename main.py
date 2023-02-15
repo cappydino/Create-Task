@@ -170,7 +170,7 @@ def main_loop():
             save_list()
             print('Done')
         elif input_text == 'delete':
-            print('Enter the name or number of the task you want to delete')
+            print('Enter the number of the task you want to delete')
             remove_task(int(input('> ')), True)                   # TODO make this better
             print('Done')
         elif input_text == 'help':
