@@ -71,7 +71,7 @@ def remove_task(input_task, protection: bool):
     """removes the task (can be number or name of task),
     if protection is true, asks the user before deleting task"""
     # if the user entered an int and if the number is in the range
-    if isinstance(input_task, int) and (input_task in range(1, list_length())):
+    if isinstance(input_task, int) and (input_task in range(1, list_length() + 1)):
         # defines delete_check for 'are you sure you want to delete {name} {done\not done}'
         delete_check = generate_delete_check(td_list[input_task - 1])
 
@@ -107,7 +107,7 @@ def remove_task(input_task, protection: bool):
         # if we are here, it means that more than one task was found
         delete_check = generate_delete_check(found_tasks, True)
         if (not protection) or (input(delete_check).lower == 'y'):
-            for i in found_tasks.reverse():              # < We have to reverse the list of indices
+            for i in found_tasks[::-1]:                  # < We have to reverse the list of indices
                 td_list.pop(i)                           # | so that we don't delete the wrong items
             return
 
