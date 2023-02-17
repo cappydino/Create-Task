@@ -1,18 +1,18 @@
 [
   {
-    "name": "do the laundry",
+    "name": "Open \"to-do list\"",
     "done": true
   },
   {
-    "name": "do the laundry",
+    "name": "Add your first task (add)",
     "done": false
   },
   {
-    "name": "math homework",
+    "name": "Complete your first task (complete)",
     "done": false
   },
   {
-    "name": "plan for dinner",
+    "name": "Clear your complete tasks (remove complete)",
     "done": true
   }
 ]
