@@ -152,7 +152,7 @@ def main_loop():
     input_text = input('> ').lower()
     # this loop will stop when the user enters 'exit'
     while not input_text == 'exit':
-        # horribly long if statement which loops through all the commands
+        # if statement which loops through all the commands
         if input_text == 'list':
             display_list()
         elif input_text == 'add':
